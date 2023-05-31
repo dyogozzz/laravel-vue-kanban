@@ -133,7 +133,6 @@ export default {
     justify-content: center;
 }
 
-
 #title {
     font-size: 2rem;
 }

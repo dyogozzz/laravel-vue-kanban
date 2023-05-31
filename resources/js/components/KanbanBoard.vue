@@ -6,11 +6,18 @@
             v-for="status in statusList"
             :data-column-id="status"
         >
-            <button class="btn" @click="getColumn">&darr;</button>
             <h2 class="lane-title">{{ status }}</h2>
+            <div class="buttons-sort">
+                <h3>Ordenar por:</h3>
+                <button class="btn" id="btn-1" @click="getColumnPrio">
+                    Prioridade
+                </button>
+                <button class="btn" id="btn-2" @click="getColumn">
+                    Vencimento
+                </button>
+            </div>
             <div class="cards-container">
                 <Draggable
-                    :sortedList="sortedList"
                     :tasks="tasks"
                     @update:list="updateSortedTasks(status, $event)"
                     :list="getTasksByStatus(status)"
@@ -36,12 +43,10 @@
                         >
                             <div class="card-info">
                                 <h2 class="task-title">{{ task.title }}</h2>
-                                <p class="task-description-title">
-                                    Descrição:
-                                </p>
+                                <p class="task-description-title">Descrição:</p>
                                 <div class="task-description">
                                     <p>
-                                    {{ task.description }}
+                                        {{ task.description }}
                                     </p>
                                 </div>
                                 <p class="task-user-name">
@@ -109,7 +114,7 @@ export default defineComponent({
                 "Em correção",
             ],
             tasks: [],
-            sortedTasks: {},
+            sortedTasks: [],
             editTask: {
                 isOpen: false,
             },
@@ -167,20 +172,69 @@ export default defineComponent({
             return dataB - dataA;
         },
 
+        orderByPrioridade(a, b) {
+            var prioridadeA = a.prioridade.toUpperCase();
+            var prioridadeB = b.prioridade.toUpperCase();
+
+            var prioridadeOrder = { A: 1, B: 2, C: 3 };
+
+            if (prioridadeOrder[prioridadeA] < prioridadeOrder[prioridadeB]) {
+                return -1;
+            }
+            if (prioridadeOrder[prioridadeA] > prioridadeOrder[prioridadeB]) {
+                return 1;
+            }
+
+            return 0;
+        },
+
+        orderByPrioridadeReverse(a, b) {
+            var prioridadeA = a.prioridade.toUpperCase();
+            var prioridadeB = b.prioridade.toUpperCase();
+
+            var prioridadeOrder = { A: 1, B: 2, C: 3 };
+
+            if (prioridadeOrder[prioridadeA] < prioridadeOrder[prioridadeB]) {
+                return 1;
+            }
+            if (prioridadeOrder[prioridadeA] > prioridadeOrder[prioridadeB]) {
+                return -1;
+            }
+
+            return 0;
+        },
+
+        getColumnPrio(event) {
+            const columnPrio = this.getColumnStatus(event.target);
+            const sortedTasks = this.sortedTasks[columnPrio];
+
+            let sortedTasksByPrio = sortedTasks.sort(
+                this.orderByPrioridadeReverse
+            );
+            this.sortedTasks[columnPrio] = sortedTasksByPrio;
+
+            setTimeout(() => {
+                sortedTasksByPrio = sortedTasks.sort(this.orderByPrioridade);
+
+                this.sortedTasks[columnPrio] = sortedTasksByPrio;
+            }, 1);
+        },
+
         getColumn(event) {
             const column = this.getColumnStatus(event.target);
             const sortedTasks = this.sortedTasks[column];
-            let sortedTasksByDueDate = sortedTasks.sort(this.orderByVencimentoReverse);
+
+            let sortedTasksByDueDate = sortedTasks.sort(this.orderByVencimento);
 
             this.sortedTasks[column] = sortedTasksByDueDate;
-            setTimeout( () => {
+
+            setTimeout(() => {
                 sortedTasksByDueDate = sortedTasks.sort(
-                this.orderByVencimento
-            );
+                    this.orderByVencimentoReverse
+                );
 
-            this.sortedTasks[column] = sortedTasksByDueDate;
-
-            },1) 
+                this.sortedTasks[column] = sortedTasksByDueDate;
+            }, 1);
         },
 
         getColumnStatus(element) {
@@ -252,13 +306,6 @@ export default defineComponent({
     font-size: 30px;
 }
 
-.btn {
-    padding: 0.8rem 0.5rem;
-    margin-bottom: 0.6rem;
-    display: flex;
-    align-content: right;
-}
-
 @media (max-width: 800px) {
     .column {
         width: 20rem;
@@ -312,6 +359,42 @@ export default defineComponent({
     margin-top: 15px;
     min-height: 200px;
     margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.buttons-sort {
+    position: relative;
+    height: 4rem;
+}
+
+.btn {
+    border-color: #333;
+    color: #333;
+    padding: 7px;
+    font-weight: bold;
+    font-size: 8pt;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+}
+
+#btn-1 {
+    position: absolute;
+    top: -10px;
+    right: 0;
+}
+
+#btn-2 {
+    position: absolute;
+    top: -10px;
+    right: 75px;
+}
+
+h3 {
+    position: absolute;
+    top: -5px;
+    left: 7px;
     font-size: 16px;
 }
 </style>

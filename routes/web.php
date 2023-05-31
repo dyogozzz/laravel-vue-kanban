@@ -34,10 +34,6 @@ Route::PUT('/edit/task/{id}', [TaskController::class, 'edit']);
 
 Route::PUT('/edit/body/task/{id}', [TaskController::class, 'editTaskFull']);
 
-Route::get('/edit', function () {
-    return view('edit');
-});
-
 Route::get('/tasks/all', [TaskController::class, 'AllTasks']);
 
 Route::get('/users', [ProfileController::class, 'AllUsers']);

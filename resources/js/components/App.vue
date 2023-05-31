@@ -3,31 +3,30 @@
     <div class="board">
         <KanbanBoard :tasks="tasks"></KanbanBoard>
     </div>
-
 </template>
 
 <script>
 import Header from "./Header.vue";
 import KanbanBoard from "./KanbanBoard.vue";
 import axios from "axios";
-import Modal from './Modal.vue'
-import {ref} from 'vue'
+import Modal from "./Modal.vue";
+import { ref } from "vue";
 
 export default {
-    setup(){
+    setup() {
         const popupTriggers = ref({
-            buttonTrigger: false
+            buttonTrigger: false,
         });
 
         const TogglePopup = (trigger) => {
-            popupTriggers.value[trigger] = !popupTriggers.value[trigger]
-        }
+            popupTriggers.value[trigger] = !popupTriggers.value[trigger];
+        };
 
         return {
             Modal,
             popupTriggers,
-            TogglePopup
-        }
+            TogglePopup,
+        };
     },
     name: "App",
     components: {
@@ -50,7 +49,7 @@ export default {
                 .then((response) => {
                     this.tasks = response.data.map((task) => ({
                         ...task,
-                        column: task.status, // Assumindo que o status determina a coluna
+                        column: task.status,
                     }));
                 })
                 .catch((error) => {

@@ -1,11 +1,11 @@
 <template>
     <div class="card">
-      <slot></slot>
+        <slot></slot>
     </div>
-  </template>
+</template>
 
 <script>
-import Modal from './Modal.vue'
+import Modal from "./Modal.vue";
 export default {
     props: {
         column: {
@@ -38,6 +38,5 @@ export default {
 .card:hover {
     background: #69bdf9;
     box-shadow: 0 1px 0 rgba(23, 77, 16, 0.25);
-
 }
 </style>

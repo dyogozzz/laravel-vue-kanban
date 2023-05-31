@@ -159,7 +159,6 @@ export default {
 }
 
 #form-container {
-
     font-size: 20px;
 }
 

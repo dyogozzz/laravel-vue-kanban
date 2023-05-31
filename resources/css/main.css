@@ -12,8 +12,13 @@ html {
 
 body {
     border: 1px solid;
+    min-height: 100vh;
     width: 100%;
-    height: 100vh;
-    background: rgb(232,80,26);
-    background: linear-gradient(180deg, rgba(232,80,26,1) 0%, rgba(0,0,0,0.9290091036414566) 95%);
+    height: 100%;
+    background: rgb(232, 80, 26);
+    background: linear-gradient(
+        180deg,
+        rgba(232, 80, 26, 1) 0%,
+        rgba(0, 0, 0, 0.9290091036414566) 95%
+    );
 }

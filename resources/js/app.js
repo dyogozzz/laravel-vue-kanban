@@ -1,12 +1,11 @@
-import './bootstrap';
-import '../css/main.css'
-import '../css/base.css'
+import "./bootstrap";
+import "../css/main.css";
 
-import { createApp } from 'vue';
-import App from './components/App.vue';
+import { createApp } from "vue";
+import App from "./components/App.vue";
 
 const app = createApp();
 
-app.component('app', App);
+app.component("app", App);
 
-app.mount('#app');
+app.mount("#app");

@@ -22,14 +22,10 @@ export default defineComponent({
             type: Array,
             required: true,
         },
-        sortedList: {
-            type: Array,
-            required: true,
-        },
     },
     components: {
         draggable: VueDraggableNext,
-    }, 
+    },
     data() {
         return {
             list: [],
@@ -46,8 +42,6 @@ export default defineComponent({
             axios.put(`/edit/task/${itemId}`, {
                 status: newStatus,
             });
-
-            console.log(this.list)
             this.$emit("update: list", this.list);
         },
         getColumnStatus(element) {
@@ -60,10 +54,6 @@ export default defineComponent({
                 }
             }
             return null;
-        },
-
-        updateTasks(newTasks) {
-            this.tasks = newTasks;
         },
     },
 });
