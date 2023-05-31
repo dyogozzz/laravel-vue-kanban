@@ -10,7 +10,7 @@ Route::get('/', function () {
 
 Route::get('/products', function () {
     return view('products');
-});
+})->middleware(['auth', 'verified'])->name('products');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -32,6 +32,8 @@ Route::post('/create/task', [TaskController::class, 'create']);
 
 Route::PUT('/edit/task/{id}', [TaskController::class, 'edit']);
 
+Route::PUT('/edit/body/task/{id}', [TaskController::class, 'editTaskFull']);
+
 Route::get('/edit', function () {
     return view('edit');
 });
@@ -42,3 +44,4 @@ Route::get('/tasks/{id}', [TaskController::class, 'tasks']);
 
 Route::get('/users', [ProfileController::class, 'AllUsers']);
 
+Route::delete('/delete/task/{id}', [TaskController::class, 'deleteTask']);

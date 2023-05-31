@@ -1,35 +1,26 @@
 <template>
     <div id="form-container">
-        <h2>Criar Nova Task</h2>
-        <form @submit.prevent="createTask">
+        <h2>Editar task</h2>
+        <form @submit.prevent="editTask">
             <div>
                 <label for="title">Título:</label>
-                <input
-                    type="text"
-                    id="title"
-                    v-model="newTask.title"
-                    required
-                />
+                <input type="text" id="title" v-model="Task.title" required />
             </div>
             <div>
                 <label for="description">Descrição:</label>
                 <textarea
                     id="description"
-                    v-model="newTask.description"
+                    v-model="Task.description"
                 ></textarea>
             </div>
             <div>
                 <label for="vencimento">Vencimento:</label>
-                <input
-                    type="date"
-                    id="vencimento"
-                    v-model="newTask.vencimento"
-                />
+                <input type="date" id="vencimento" v-model="Task.vencimento" />
             </div>
             <div>
                 <label for="prioridade">Prioridade:</label>
                 <br />
-                <select id="prioridade" v-model="newTask.prioridade">
+                <select id="prioridade" v-model="Task.prioridade">
                     <option value="c">Baixa</option>
                     <option value="b">Média</option>
                     <option value="a">Alta</option>
@@ -38,7 +29,7 @@
             <div>
                 <label for="usuario">Usuário:</label>
                 <br />
-                <select id="usuario" v-model="newTask.usuario">
+                <select id="usuario" v-model="Task.usuario">
                     <option
                         v-for="user in users"
                         :value="user.id"
@@ -48,7 +39,7 @@
                     </option>
                 </select>
             </div>
-            <button class="btn-create" type="submit">Criar</button>
+            <button class="btn-create" type="submit">Editar</button>
         </form>
     </div>
 </template>
@@ -56,12 +47,19 @@
 <script>
 import axios from "axios";
 export default {
+    props: {
+        taskId: {
+            type: String,
+            required: true,
+        },
+    },
     data() {
         return {
-            newTask: {
+            Task: {
                 title: "",
                 description: "",
                 status: "Backlog",
+                prioridade: "",
                 vencimento: "",
                 usuario: "",
             },
@@ -82,14 +80,14 @@ export default {
                     console.error(error);
                 });
         },
-        createTask() {
+        editTask() {
             axios
-                .post("/create/task", this.newTask)
-                .then((response) => {
-                    this.newTask = {
+                .put(`/edit/body/task/${this.taskId}`, this.Task)
+                .then(() => {
+                    this.Task = {
                         title: "",
                         description: "",
-                        status: "Backlog",
+                        prioridade: "",
                         vencimento: "",
                         usuario: "",
                     };

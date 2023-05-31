@@ -42,6 +42,7 @@
   .popup-inner {
     background: #fff;
     padding: 32px;
+    border-radius: 15px;
   }
   
   .modal-content {

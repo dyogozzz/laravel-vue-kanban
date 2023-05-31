@@ -18,6 +18,7 @@ class CreateTasks extends Migration
             $task->string('title');
             $task->string('description');
             $task->string('status');
+            $task->string('prioridade');
             $task->date('vencimento');
             $task->string('usuario');
         });

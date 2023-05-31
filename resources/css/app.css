@@ -13,8 +13,8 @@
 }
 
 #logo #svg-logo {
-    height: 400px;
-    width: 400px;
+    height: 200px;
+    width: 200px;
     display: flex;
     justify-content: center;
 }
@@ -94,7 +94,7 @@ title {
 }
 
 #body {
-    border: 1px solid;
+    border-top: 1px solid rgba(232,80,26,1);
     width: 100%;
     height: 100vh;
     background: rgb(232,80,26);
@@ -117,7 +117,7 @@ title {
     width: 20rem;
 }
 
-h1 {
+#h1-title {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
@@ -217,4 +217,89 @@ p {
 
 #span {
     margin-left: 3px;
+}
+
+.container-auth {
+    font-size: 50px;
+}
+
+.custom-status-message {
+    background-color: rgba(218, 84, 67, 0.838);
+    justify-content: center;
+    font-size: 30px;
+    display: flex;
+    color: #333;
+    height: 50px;
+}
+
+.card-update {
+    background-color: rgba(155, 154, 154, 0.545);
+    font-size: 30px;
+    opacity: 0.8;
+    padding: 30px;
+    border-radius: 4%;
+    box-shadow: 3px 3px 1px 0px #00000060;
+    width: 20rem;
+    margin-top: -50px;
+}
+
+
+.label-float-update input {
+    width: 100%;
+    padding: 5px 5px;
+    display: inline-block;
+    border: 0;
+    border-bottom: 2px solid #323940;
+    background-color: transparent;
+    outline: none;
+    min-width: 180px;
+    font-size: 16px;
+    transition: all 0.3s ease-out;
+    border-radius: 0px;
+}
+
+.label-float-update {
+    position: relative;
+    padding-top: 13px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.label-float-update input :focus {
+    border-bottom: 2px solid #323940;
+}
+
+.label-float-update label {
+    color: #323940;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    margin-top: 13px;
+    transition: all 0.3s ease-out;
+}
+
+.label-float-update input:focus + label,
+.label-float-update input:valid + label {
+    font-size: 13px;
+    margin-top: 0;
+    color: #323940;
+}
+
+#button-update {
+    background-color: transparent;
+    border-color: #323940;
+    color: #323940;
+    padding: 7px;
+    font-weight: bold;
+    font-size: 12pt;
+    margin-top: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.4s ease-out;
+}
+
+#button-update:hover {
+    background-color:#323940;
+    color: white;
 }

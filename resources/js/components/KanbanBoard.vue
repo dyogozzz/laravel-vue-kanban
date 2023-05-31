@@ -6,12 +6,15 @@
             v-for="status in statusList"
             :data-column-id="status"
         >
-            <button class="btn" @click="getColumn">&darr;</button>
+            <button class="btn" @click="startOrdering">&darr;</button>
             <h2 class="lane-title">{{ status }}</h2>
             <div class="cards-container">
                 <Draggable
+                    :is-ordering="isOrdering"
+                    :tasks="tasks"
                     @update:list="updateSortedTasks(status, $event)"
                     :list="getTasksByStatus(status)"
+                    ref="draggable"
                 >
                     <div
                         v-for="task in getTasksByStatus(status)"
@@ -31,11 +34,30 @@
                             :isOpen="task.isOpen"
                             @close="closeModal(task)"
                         >
-                            <div>
+                            <div id="card-info">
                                 <h2>{{ task.title }}</h2>
-                                <p>{{ task.description }}</p>
-                                <p>{{ task.usuario }}</p>
-                                <p>{{ task.vencimento }}</p>
+                                <p>Descrição da task:</p>
+                                <div>{{ task.description }}</div>
+                                <br />
+                                <p>Usuário responsável:</p>
+                                <div>{{ task.usuario }}</div>
+                                <br />
+                                <p>vencimento da task: {{ task.vencimento }}</p>
+                                <button @click="openModalEdit(task)">
+                                    Editar task
+                                </button>
+                                <button @click="ExcludeTask(task.id)">
+                                    Apagar task
+                                </button>
+                                <Modal
+                                    :isOpen="editTask.isOpen"
+                                    @close="closeModalEdit"
+                                >
+                                    <Edit
+                                        v-if="editTask.isOpen"
+                                        :taskId="task.id"
+                                    ></Edit>
+                                </Modal>
                             </div>
                         </Modal>
                     </div>
@@ -51,18 +73,38 @@ import Card from "./Card.vue";
 import Draggable from "./Draggable.vue";
 import axios from "axios";
 import Modal from "./Modal.vue";
+import Edit from "./Edit.vue";
 
 export default defineComponent({
+    watch: {
+        statusList: {
+            handler() {
+                this.updateDraggableLists();
+            },
+            deep: true,
+        },
+    },
     components: {
         Draggable,
         Card,
         Modal,
+        Edit,
     },
     data() {
         return {
-            statusList: ["Backlog", "Pendente", "Em andamento", "Concluído"],
+            statusList: [
+                "Backlog",
+                "Pendente",
+                "Em andamento",
+                "Concluído",
+                "Em correção",
+            ],
             tasks: [],
             sortedTasks: {},
+            isOrdering: false,
+            editTask: {
+                isOpen: false,
+            },
         };
     },
     methods: {
@@ -77,9 +119,17 @@ export default defineComponent({
                     console.error(error);
                 });
         },
+
+        ExcludeTask(id) {
+            axios.delete(`/delete/task/${id}`);
+
+            window.location.reload();
+        },
+
         getTasksByStatus(status) {
             return this.sortedTasks[status] || [];
         },
+
         sortTasksByStatus() {
             this.statusList.forEach((status) => {
                 const tasksByStatus = this.tasks.filter(
@@ -88,11 +138,13 @@ export default defineComponent({
                 this.sortedTasks[status] = tasksByStatus;
             });
         },
+
         orderByVencimento(a, b) {
             var dataA = new Date(a.vencimento);
             var dataB = new Date(b.vencimento);
             return dataA - dataB;
         },
+
         getColumn(event) {
             const column = this.getColumnStatus(event.target);
             const sortedTasks = [...this.sortedTasks[column]];
@@ -100,27 +152,29 @@ export default defineComponent({
                 this.orderByVencimento
             );
 
-            // const columnElement = event.target.closest(".column");
-            // const cardsContainer =
-            //     columnElement.querySelector(".cards-container");
+            // Atualize as tasks da coluna
+            this.sortedTasks[column] = sortedTasksByDueDate;
 
-            // // Remover todos os cards existentes
-            // while (cardsContainer.firstChild) {
-            //     cardsContainer.removeChild(cardsContainer.firstChild);
-            // }
-
-            // sortedTasksByDueDate.forEach((task) => {
-            //     const cardElement = document.createElement("div");
-            //     cardElement.classList.add("card");
-            //     cardElement.textContent = task.title;
-
-            //     // Adicione qualquer lógica adicional para estilizar o card ou adicionar classes, etc.
-
-            //     cardsContainer.appendChild(cardElement);
-            // });
+            // Emita o evento de atualização para o componente Draggable
+            this.$refs.draggable.updateList(column, sortedTasksByDueDate);
         },
+
+        toggleSorting() {
+            this.enableSorting = !this.enableSorting;
+        },
+
+        flattenTasks() {
+            return this.statusList.flatMap(
+                (status) => this.sortedTasks[status]
+            );
+        },
+
         updateSortedTasks(status, updatedList) {
             this.sortedTasks[status] = updatedList;
+        },
+
+        startOrdering() {
+            this.$emit("update:is-ordering", true);
         },
 
         getColumnStatus(element) {
@@ -134,11 +188,21 @@ export default defineComponent({
             }
             return null;
         },
+
         openModal(task) {
             task.isOpen = true;
         },
+
         closeModal(task) {
             task.isOpen = false;
+        },
+
+        openModalEdit() {
+            this.editTask.isOpen = true;
+        },
+
+        closeModalEdit() {
+            this.editTask.isOpen = false;
         },
     },
     mounted() {
@@ -148,6 +212,10 @@ export default defineComponent({
 </script>
 
 <style>
+#card-info {
+    font-size: 20px;
+}
+
 .kanban {
     display: flex;
     flex-wrap: wrap;
@@ -157,7 +225,7 @@ export default defineComponent({
 }
 
 .column {
-    background: var(--color-grey);
+    background: #e0e0e0;
     width: 23rem;
     min-height: 35rem;
     border-radius: 0.8rem;
@@ -168,6 +236,8 @@ export default defineComponent({
     flex-direction: column;
     overflow-y: auto;
     flex-grow: 1;
+    margin-bottom: 20px;
+    max-width: 35rem;
 }
 
 .lane-title {
@@ -181,5 +251,13 @@ export default defineComponent({
     margin-bottom: 0.6rem;
     display: flex;
     align-content: right;
+}
+
+@media (max-width: 800px) {
+    .column {
+        width: 20rem;
+        min-width: 28rem;
+        max-width: 28rem;
+    }
 }
 </style>

@@ -1,36 +1,26 @@
 <template>
     <div class="navbar">
-        <a href="/dashboard">Dashboard</a>
-        <a @click="openCreateModal">Criar Task</a>
+        <a href="/profile">Dashboard</a>
+        <a href="#" @click="openCreateModal">Criar Task</a>
         <Modal :is-open="isCreateModalOpen" @close="closeCreateModal">
             <Create />
         </Modal>
 
         <div class="dropdown">
-            <button class="drop-btn">Área de trabalho</button>
+            <button class="drop-btn">Exemplo</button>
 
             <div class="dropdown-content">
-                <a href="#home">link1</a>
+                <a href="#home">link 1</a>
                 <a href="#home">Link 2</a>
                 <a href="#home">Link 3</a>
             </div>
         </div>
 
         <div class="dropdown">
-            <button class="drop-btn">recentes</button>
+            <button class="drop-btn">Outro exemplo</button>
 
             <div class="dropdown-content">
-                <a href="#home">link1</a>
-                <a href="#home">Link 2</a>
-                <a href="#home">Link 3</a>
-            </div>
-        </div>
-
-        <div class="dropdown">
-            <button class="drop-btn">criar</button>
-
-            <div class="dropdown-content">
-                <a href="#home">link1</a>
+                <a href="#home">link 1</a>
                 <a href="#home">Link 2</a>
                 <a href="#home">Link 3</a>
             </div>
@@ -68,7 +58,7 @@ export default {
 .navbar {
     overflow: hidden;
     background-color: #333;
-    height: 3.5rem;
+    height: 4.6rem;
 }
 
 .navbar a {
@@ -104,7 +94,7 @@ export default {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 150px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }

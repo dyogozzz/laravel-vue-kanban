@@ -1,23 +1,25 @@
+@section('title', 'Entrar')
+
 <x-guest-layout>
-    <x-auth-session-status :status="session('status')" />
+    <x-auth-session-status class="custom-status-message" :status="session('status')" />
 
         <div id="body">
             <div class="container-login">
                 <div class="card-login">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-                        <h1>Entrar</h1>
+                        <h2 class="justify-center" id="h2-auth">Entrar</h2>
 
                         <div class="label-float">
                             <x-input-label for="email" :value="__('Email')" />
-                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
                         <div class="label-float">
                             <x-input-label id="labelSenha" for="password" :value="__('Senha')" />
 
-                            <x-text-input id="password" class="block mt-1 w-full"
+                            <x-text-input id="password"
                                 type="password"
                                 name="password"
                                 required autocomplete="current-password" />
@@ -35,14 +37,8 @@
                         </div>
 
                         <div>
-                            @if (Route::has('password.request'))
-                                <a id="forgot" href="{{ route('password.request') }}">
-                                    {{ __('Esqueceu sua senha?') }}
-                                </a>
-                            @endif
-
-                            <div>
-                                <a id="forgot" href="/register">
+                            <div >
+                                <a style="padding-bottom:3px;" id="forgot" href="/register">
                                     Não tem uma conta? Registrar
                                 </a>
                             </div>

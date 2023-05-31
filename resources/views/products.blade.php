@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title', 'Tasks')
 
 @section('content')
 
@@ -6,8 +7,6 @@
 @auth
     <App />
 @else
-    <p>faça login para continuar</p>
-    <a href="/login">Fazer login</a>
 @endauth
 
 @endif

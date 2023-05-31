@@ -6,17 +6,17 @@
             <button class="drop-btn">Área de trabalho</button>
 
             <div class="dropdown-content">
-                <a href="#home">link1</a>
+                <a href="#home">link 1</a>
                 <a href="#home">Link 2</a>
                 <a href="#home">Link 3</a>
             </div>
         </div>
 
         <div class="dropdown">
-            <button class="drop-btn">recentes</button>
+            <button class="drop-btn">Recentes</button>
 
             <div class="dropdown-content">
-                <a href="#home">link1</a>
+                <a href="#home">link 1</a>
                 <a href="#home">Link 2</a>
                 <a href="#home">Link 3</a>
             </div>
@@ -26,7 +26,7 @@
             <button class="drop-btn">{{ __('Perfil') }}</button>
 
             <div class="dropdown-content">
-            <x-dropdown-link :href="route('profile.edit')">
+            <x-dropdown-link href="#">
                     {{ Auth::user()->name }}
                         </x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
