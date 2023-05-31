@@ -6,11 +6,11 @@
             v-for="status in statusList"
             :data-column-id="status"
         >
-            <button class="btn" @click="startOrdering">&darr;</button>
+            <button class="btn" @click="getColumn">&darr;</button>
             <h2 class="lane-title">{{ status }}</h2>
             <div class="cards-container">
                 <Draggable
-                    :is-ordering="isOrdering"
+                    :sortedList="sortedList"
                     :tasks="tasks"
                     @update:list="updateSortedTasks(status, $event)"
                     :list="getTasksByStatus(status)"
@@ -34,21 +34,38 @@
                             :isOpen="task.isOpen"
                             @close="closeModal(task)"
                         >
-                            <div id="card-info">
-                                <h2>{{ task.title }}</h2>
-                                <p>Descrição da task:</p>
-                                <div>{{ task.description }}</div>
+                            <div class="card-info">
+                                <h2 class="task-title">{{ task.title }}</h2>
+                                <p class="task-description-title">
+                                    Descrição:
+                                </p>
+                                <div class="task-description">
+                                    <p>
+                                    {{ task.description }}
+                                    </p>
+                                </div>
+                                <p class="task-user-name">
+                                    Usuário responsável: {{ task.usuario }}
+                                </p>
                                 <br />
-                                <p>Usuário responsável:</p>
-                                <div>{{ task.usuario }}</div>
-                                <br />
-                                <p>vencimento da task: {{ task.vencimento }}</p>
-                                <button @click="openModalEdit(task)">
-                                    Editar task
-                                </button>
-                                <button @click="ExcludeTask(task.id)">
-                                    Apagar task
-                                </button>
+                                <p class="task-due">
+                                    Data limite:
+                                    {{ formatDate(task.vencimento) }}
+                                </p>
+                                <div class="div-button">
+                                    <button
+                                        class="button-modal"
+                                        @click="openModalEdit(task)"
+                                    >
+                                        Editar task
+                                    </button>
+                                    <button
+                                        class="button-modal"
+                                        @click="ExcludeTask(task.id)"
+                                    >
+                                        Apagar task
+                                    </button>
+                                </div>
                                 <Modal
                                     :isOpen="editTask.isOpen"
                                     @close="closeModalEdit"
@@ -76,14 +93,6 @@ import Modal from "./Modal.vue";
 import Edit from "./Edit.vue";
 
 export default defineComponent({
-    watch: {
-        statusList: {
-            handler() {
-                this.updateDraggableLists();
-            },
-            deep: true,
-        },
-    },
     components: {
         Draggable,
         Card,
@@ -101,7 +110,6 @@ export default defineComponent({
             ],
             tasks: [],
             sortedTasks: {},
-            isOrdering: false,
             editTask: {
                 isOpen: false,
             },
@@ -110,7 +118,7 @@ export default defineComponent({
     methods: {
         fetchTasks() {
             axios
-                .get("/tasks")
+                .get("/tasks/all")
                 .then((response) => {
                     this.tasks = response.data;
                     this.sortTasksByStatus();
@@ -118,6 +126,14 @@ export default defineComponent({
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
         },
 
         ExcludeTask(id) {
@@ -145,36 +161,26 @@ export default defineComponent({
             return dataA - dataB;
         },
 
+        orderByVencimentoReverse(a, b) {
+            var dataA = new Date(a.vencimento);
+            var dataB = new Date(b.vencimento);
+            return dataB - dataA;
+        },
+
         getColumn(event) {
             const column = this.getColumnStatus(event.target);
-            const sortedTasks = [...this.sortedTasks[column]];
-            const sortedTasksByDueDate = sortedTasks.sort(
+            const sortedTasks = this.sortedTasks[column];
+            let sortedTasksByDueDate = sortedTasks.sort(this.orderByVencimentoReverse);
+
+            this.sortedTasks[column] = sortedTasksByDueDate;
+            setTimeout( () => {
+                sortedTasksByDueDate = sortedTasks.sort(
                 this.orderByVencimento
             );
 
-            // Atualize as tasks da coluna
             this.sortedTasks[column] = sortedTasksByDueDate;
 
-            // Emita o evento de atualização para o componente Draggable
-            this.$refs.draggable.updateList(column, sortedTasksByDueDate);
-        },
-
-        toggleSorting() {
-            this.enableSorting = !this.enableSorting;
-        },
-
-        flattenTasks() {
-            return this.statusList.flatMap(
-                (status) => this.sortedTasks[status]
-            );
-        },
-
-        updateSortedTasks(status, updatedList) {
-            this.sortedTasks[status] = updatedList;
-        },
-
-        startOrdering() {
-            this.$emit("update:is-ordering", true);
+            },1) 
         },
 
         getColumnStatus(element) {
@@ -259,5 +265,53 @@ export default defineComponent({
         min-width: 28rem;
         max-width: 28rem;
     }
+}
+
+.card-info {
+    font-size: 20px;
+    min-width: 30rem;
+    min-height: 30rem;
+}
+
+.div-button {
+    display: flex;
+    justify-content: center;
+}
+
+.button-modal {
+    border-color: #333;
+    color: #333;
+    padding: 7px;
+    margin: 0 5px;
+    font-weight: bold;
+    font-size: 12pt;
+    margin-top: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+}
+
+.button-modal:hover {
+    background-color: rgb(206, 82, 20);
+    color: white;
+}
+
+.task-title {
+    color: #333;
+    display: flex;
+    justify-content: center;
+}
+
+.task-description-title {
+    margin-top: 15px;
+}
+
+.task-description {
+    max-width: 420px;
+    margin-top: 15px;
+    min-height: 200px;
+    margin-bottom: 30px;
+    font-size: 16px;
 }
 </style>

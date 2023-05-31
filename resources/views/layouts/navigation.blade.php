@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
 <div class="navbar">
-        <a href="/products">Home</a>
+        <a href="/tasks">Home</a>
 
         <div class="dropdown">
             <button class="drop-btn">Área de trabalho</button>

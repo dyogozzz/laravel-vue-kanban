@@ -8,9 +8,9 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/products', function () {
-    return view('products');
-})->middleware(['auth', 'verified'])->name('products');
+Route::get('/tasks', function () {
+    return view('tasks');
+})->middleware(['auth', 'verified'])->name('tasks');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -38,9 +38,7 @@ Route::get('/edit', function () {
     return view('edit');
 });
 
-Route::get('/tasks', [TaskController::class, 'AllTasks']);
-
-Route::get('/tasks/{id}', [TaskController::class, 'tasks']);
+Route::get('/tasks/all', [TaskController::class, 'AllTasks']);
 
 Route::get('/users', [ProfileController::class, 'AllUsers']);
 

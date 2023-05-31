@@ -41,14 +41,16 @@
                 <select id="usuario" v-model="newTask.usuario">
                     <option
                         v-for="user in users"
-                        :value="user.id"
+                        :value="user.name"
                         :key="user.id"
                     >
                         {{ user.name }}
                     </option>
                 </select>
             </div>
-            <button class="btn-create" type="submit">Criar</button>
+            <div class="btn-content">
+                <button class="btn-create" type="submit">Criar</button>
+            </div>
         </form>
     </div>
 </template>
@@ -111,27 +113,26 @@ export default {
     box-sizing: border-box;
 }
 .btn-create {
-    display: flex;
-    align-items: center;
-}
-
-.btn-create button {
-    border: none;
-    background-color: #6c63ff;
-    padding: 0.4rem 1rem;
-    border-radius: 5px;
+    border-color: #333;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: all 0.3s ease-out;
+    width: 80px;
 }
 
-.btn-create button:hover {
-    background-color: #6b63fff1;
+.btn-create:hover {
+    background-color: rgb(206, 82, 20);
+    color: white;
 }
 
-.btn-create button a {
-    text-decoration: none;
-    font-weight: 500;
-    color: #fff;
+.btn-content {
+    display: flex;
+    justify-content: center;
 }
+
 
 #title {
     font-size: 2rem;
@@ -160,8 +161,6 @@ export default {
 }
 
 #form-container {
-    width: 50rem;
-    height: 50rem;
     font-size: 20px;
 }
 

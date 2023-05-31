@@ -16,9 +16,9 @@ class CreateTasks extends Migration
         Schema::create('tasks', function (Blueprint $task) {
             $task->id();
             $task->string('title');
-            $task->string('description');
+            $task->text('description');
             $task->string('status');
-            $task->string('prioridade');
+            $task->string('prioridade', 1);
             $task->date('vencimento');
             $task->string('usuario');
         });

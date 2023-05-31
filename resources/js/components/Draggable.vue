@@ -17,23 +17,19 @@ import { VueDraggableNext } from "vue-draggable-next";
 import axios from "axios";
 
 export default defineComponent({
-    watch: {
-        isOrdering(newVal) {
-            if (newVal) {
-                this.orderTasks();
-            }
-        },
-    },
     props: {
         tasks: {
             type: Array,
             required: true,
         },
-        isOrdering: Boolean,
+        sortedList: {
+            type: Array,
+            required: true,
+        },
     },
     components: {
         draggable: VueDraggableNext,
-    },
+    }, 
     data() {
         return {
             list: [],
@@ -51,11 +47,11 @@ export default defineComponent({
                 status: newStatus,
             });
 
+            console.log(this.list)
             this.$emit("update: list", this.list);
         },
         getColumnStatus(element) {
             const columnElement = element.closest(".column");
-            console.log(element);
             if (columnElement) {
                 const laneTitleElement =
                     columnElement.querySelector(".lane-title");
@@ -65,21 +61,9 @@ export default defineComponent({
             }
             return null;
         },
-        orderTasks() {
-            const columnStatus = this.getColumnStatus(this.$el);
-            if (columnStatus) {
-                const sortedTasks = this.tasks.filter(
-                    (task) => task.status === columnStatus
-                );
-                this.tasks = sortedTasks;
-            }
-        },
 
         updateTasks(newTasks) {
             this.tasks = newTasks;
-        },
-        startOrdering() {
-            this.$emit("update:is-ordering", true);
         },
     },
 });
