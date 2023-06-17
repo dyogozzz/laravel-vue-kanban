@@ -47,11 +47,6 @@ class TaskController extends Controller
 
         return response()->json(['message' => 'Tarefa atualizada com sucesso']);
 }
-
-    public function login() {
-        return view('obrigatoriedade');
-    }
-
     public function AllTasks() {
         $tasks = Task::all();
     
