@@ -39,7 +39,7 @@ export default defineComponent({
             const newStatus = this.getColumnStatus(event.to);
             const itemId = event.item.getAttribute("data-item-id");
 
-            axios.put(`/edit/task/${itemId}`, {
+            axios.put(`/api/edit/task/${itemId}`, {
                 status: newStatus,
             });
             this.$emit("update: list", this.list);

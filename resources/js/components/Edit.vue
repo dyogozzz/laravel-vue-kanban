@@ -75,7 +75,7 @@ export default {
     methods: {
         fetchUsers() {
             axios
-                .get("/users")
+                .get("/api/users")
                 .then((response) => {
                     this.users = response.data;
                 })
@@ -85,7 +85,7 @@ export default {
         },
         editTask() {
             axios
-                .put(`/edit/body/task/${this.taskId}`, this.Task)
+                .put(`/api/edit/body/task/${this.taskId}`, this.Task)
                 .then(() => {
                     this.Task = {
                         title: "",

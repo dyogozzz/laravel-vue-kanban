@@ -20,7 +20,7 @@ class CreateTasks extends Migration
             $task->string('status');
             $task->string('prioridade', 1);
             $task->date('vencimento');
-            $task->string('usuario');
+            $task->string('usuario_id');
         });
     }
 

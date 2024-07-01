@@ -123,7 +123,7 @@ export default defineComponent({
     methods: {
         fetchTasks() {
             axios
-                .get("/tasks/all")
+                .get("/api/tasks/all")
                 .then((response) => {
                     this.tasks = response.data;
                     this.sortTasksByStatus();
@@ -142,7 +142,7 @@ export default defineComponent({
         },
 
         ExcludeTask(id) {
-            axios.delete(`/delete/task/${id}`);
+            axios.delete(`/api/delete/task/${id}`);
 
             window.location.reload();
         },

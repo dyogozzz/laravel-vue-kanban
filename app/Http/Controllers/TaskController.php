@@ -15,7 +15,7 @@ class TaskController extends Controller
         $task->status = $request->status;
         $task->prioridade = $request->prioridade;
         $task->vencimento = $request->vencimento;
-        $task->usuario = $request->usuario;
+        $task->usuario_id = $request->usuario;
 
         $task->save();
 
@@ -33,20 +33,21 @@ class TaskController extends Controller
     }
 
     public function editTaskFull(Request $request, $id)
-{
-    DB::table('tasks')
-        ->where('id', $id)
-        ->update([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'prioridade' => $request->input('prioridade'),
-            'vencimento' => $request->input('vencimento'),
-            'usuario' => $request->input('usuario'),
-        ]);
+    {
+        DB::table('tasks')
+            ->where('id', $id)
+            ->update([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'prioridade' => $request->input('prioridade'),
+                'vencimento' => $request->input('vencimento'),
+                'usuario_id' => $request->input('usuario'),
+            ]);
 
 
         return response()->json(['message' => 'Tarefa atualizada com sucesso']);
-}
+    }
+
     public function AllTasks() {
         $tasks = Task::all();
     
@@ -65,4 +66,3 @@ class TaskController extends Controller
         return response('msg', 'Deletada com sucesso');
     }
 }
-

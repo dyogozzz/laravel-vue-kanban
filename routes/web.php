@@ -19,15 +19,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-Route::post('/create/task', [TaskController::class, 'create']);
-
-Route::PUT('/edit/task/{id}', [TaskController::class, 'edit']);
-
-Route::PUT('/edit/body/task/{id}', [TaskController::class, 'editTaskFull']);
-
-Route::get('/tasks/all', [TaskController::class, 'AllTasks']);
-
-Route::get('/users', [ProfileController::class, 'AllUsers']);
-
-Route::delete('/delete/task/{id}', [TaskController::class, 'deleteTask']);
